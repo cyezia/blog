@@ -1,5 +1,6 @@
 import React from "react";
 import MDEditor from '@uiw/react-md-editor';
+import { Outlet } from 'react-router-dom';
 import './style.less';
 
 export default function Editor() {
@@ -28,6 +29,7 @@ export default function Editor() {
         onChange={setValue}
         height={'100%'}
       />
+      <Outlet />
     </div>
   );
 }

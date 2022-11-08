@@ -41,6 +41,16 @@ const router = [
     path: pathsMap.editor,
     element: <Editor />
   },
+  {
+    name: 'editorCreate',
+    path: pathsMap.editorCreate,
+    element: <Editor />
+  },
+  {
+    name: 'editorEdit',
+    path: pathsMap.editorEdit,
+    element: <Editor />
+  }
 ]
 
 export default router;

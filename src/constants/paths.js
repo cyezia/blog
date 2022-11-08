@@ -5,9 +5,11 @@ export const pathsMap = {
   administer: '/administer',
   userManagement: '/administer/user', // 用户管理
 
-  article: '/administer/blog/article', // 文章管理
+  article: '/administer/blog/article/*', // 文章管理
   tagManagement: '/administer/blog/tag', // 标签管理
-  editor: '/editor' // 写作页面
+  editor: '/editor', // 写作页面
+  editorCreate: '/editor/create', // 写文章
+  editorEdit: '/editor/edit'  // 修改文章
 }
 
 export const administerRouterList = [

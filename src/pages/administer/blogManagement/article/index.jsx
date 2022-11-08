@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, Route, Routes, useParams } from 'react-router-dom';
 import { Table, Divider } from 'antd';
+import Editor from '../editor/index';
 import './style.less';
 
 const state = {
@@ -16,7 +17,7 @@ const state = {
   ]
 }
 
-const Article = (props) => {
+const Article = () => {
   const { messageArr } = state;
   const navigate = useNavigate();
 
@@ -45,7 +46,7 @@ const Article = (props) => {
       title: '操作',
       render: (_, record) => (
         <span>
-          <a>修改</a>
+          <a onClick={() => handleEdit(record, 'edit')}>修改</a>
           <Divider type="vertical" />
           <a onClick={() => {updateData(record, 'delete')}} style={{color: '#ff4d4f'}} >删除</a>
         </span>
@@ -71,8 +72,12 @@ const Article = (props) => {
   }
 
   // push跳转 以params参数为例 navigate默认开始push跳转
-  const handleView = (id, type) => {
-    navigate(`/editor/${type}`)
+  // const handleView = (id, type) => {
+  //   navigate(`/editor/${type}`);
+  // }
+
+  const handleEdit = () => {
+    navigate(`/editor/edit`);
   }
 
   return (
@@ -84,13 +89,16 @@ const Article = (props) => {
               return (
                 <li key={msgObj.id}>
                   {/* 向路由组件传递params参数 */}
-                  <Link to={`/editor/${msgObj.type}`}>写文章</Link>
+                  <Link to={`/editor/${msgObj.type}`} target = "_blank" style={{color: '#fff'}}>写文章</Link>
                 </li>
               )
             })
           }
         </ul>
-        {/* <a onClick={() => handleView()} className="link" type="create" target="_blank">写文章</a> */}
+        <Routes>
+          {/* 声明接收param参数 */}
+          <Route path="`/editor/:type`" element={<Editor />} />
+        </Routes>
       </div>
       <Table columns={columns} dataSource={data} />
     </div>

@@ -22,7 +22,7 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem(<Link to="/administer">博客管理</Link>, '/administer', <FileOutlined />, [
+  getItem(<Link to="/administer" style={{color: '#fff'}}>博客管理</Link>, '/administer', <FileOutlined />, [
     getItem(<Link to="/administer/blog/article">文章管理</Link>, '/administer/blog/article', <EditOutlined />), 
     getItem(<Link to="/administer/blog/tag">标签管理</Link>, '/administer/blog/tag', <TagOutlined />),
   ]),
