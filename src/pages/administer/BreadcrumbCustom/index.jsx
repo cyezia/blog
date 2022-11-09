@@ -22,7 +22,7 @@ const breadcrumbNameMap = {
       // <Breadcrumb.Item key="article"></Breadcrumb.Item>,
       <Breadcrumb.Item key={url}><Link to={url}>{breadcrumbNameMap[url]}</Link></Breadcrumb.Item>
     ]
-    console.log('breadcrumbItems', breadcrumbItems);
+    // console.log('breadcrumbItems', breadcrumbItems);
 
   return (
     <div className="demo">

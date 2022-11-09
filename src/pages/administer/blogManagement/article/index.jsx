@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, Route, Routes, useParams } from 'react-router-dom';
 import { Table, Divider } from 'antd';
+import { connect } from 'react-redux';
 import Editor from '../editor/index';
+import { actionCreators } from '../../../../store/tables';
 import './style.less';
 
 const state = {
@@ -17,24 +19,28 @@ const state = {
   ]
 }
 
-const Article = () => {
+const Article = (props) => {
+  console.log('props', props.dataSource.toJS());
   const { messageArr } = state;
   const navigate = useNavigate();
+  // let dataSource = props.dataSource;
+  let dataSource = props.dataSource.toJS();
+  // console.log('dataSource', dataSource);
 
-  const [data, setData] = useState([
-    {
-      key: '1',
-      name: 'test1',
-    },
-    {
-      key: '2',
-      name: 'test2',
-    },
-    {
-      key: '3',
-      name: 'test3',
-    },
-  ]);
+  // const [data, setData] = useState([
+  //   {
+  //     key: '1',
+  //     name: 'test1',
+  //   },
+  //   {
+  //     key: '2',
+  //     name: 'test2',
+  //   },
+  //   {
+  //     key: '3',
+  //     name: 'test3',
+  //   },
+  // ]);
   // Table数据
   const columns = [
     {
@@ -46,9 +52,12 @@ const Article = () => {
       title: '操作',
       render: (_, record) => (
         <span>
-          <a onClick={() => handleEdit(record, 'edit')}>修改</a>
+          {/* <a onClick={() => handleEdit(record, 'edit')}>修改</a>
           <Divider type="vertical" />
-          <a onClick={() => {updateData(record, 'delete')}} style={{color: '#ff4d4f'}} >删除</a>
+          <a onClick={() => {updateData(record, 'delete')}} style={{color: '#ff4d4f'}} >删除</a> */}
+          <a onClick={props.handleEdit(record)}>修改</a>
+          <Divider type="vertical" />
+          <a onClick={props.handleDelete(record)} style={{color: '#ff4d4f'}} >删除</a>
         </span>
       ),
     },
@@ -100,8 +109,25 @@ const Article = () => {
           <Route path="`/editor/:type`" element={<Editor />} />
         </Routes>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={dataSource} />
     </div>
   )
 }
-export default Article;
+
+const mapStateToProps = (state) => {
+  return {
+    dataSource: state.get('tables').get('dataSource')
+  }
+}
+const mapDispatchToProps = (dispatch) => ({
+  handleEdit(record) {
+    // console.log('编辑', record);
+    dispatch(actionCreators.editItme(record))
+  },
+  handleDelete(record) {
+    let key = record.key;
+    dispatch(actionCreators.deleteItem(key))
+  }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Article);
+// export default Article;

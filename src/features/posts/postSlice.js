@@ -1,6 +1,5 @@
 // 定义初始post数组 将其传递给createSlice 
 import { createSlice } from '@reduxjs/toolkit';
-import { Divider } from 'antd';
 
 const initialState = [
   {
@@ -10,7 +9,11 @@ const initialState = [
   {
     key: '2',
     name: 'test2'
-  }
+  },
+  {
+    key: '3',
+    name: 'test3'
+  },
 ]
 
 const postsSlice = createSlice({
@@ -18,6 +21,6 @@ const postsSlice = createSlice({
   initialState,
   reducers: {}
 })
-console.log('post', post);
+// console.log('post', post);
 
 export default postsSlice.reducer;
