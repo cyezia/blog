@@ -1,11 +1,9 @@
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Space, Form, Input } from 'antd';
-import React, { useState } from 'react';
-import TagList from '../tagList';
+import React, { useState, useEffect } from 'react';
+import { Button, Modal, Space, Form, Input, Table, Divider } from 'antd';
 import './style.less';
 
 let index = 1;
-function Tag(props) {
+function Tag() {
   // Form.useForm()对表单数据进行交互
   const [form] = Form.useForm();
 
@@ -16,12 +14,58 @@ function Tag(props) {
   const [type, setType] = useState('');
 
   // 模拟Table表格数据
-  const [data, setData] = useState([])
+  const [data, setData] = useState([
+    {
+      key: 1,
+      name: '1',
+      color: '1'
+    },
+    {
+      key: 2,
+      name: '2',
+      color: '2'
+    },
+    {
+      key: 3,
+      name: '3',
+      color: '3'
+    }
+  ])
   // Modal弹窗
   const [modalOpen, setModalOpen] = useState(false);
-  const hideModal = () => {
-    setModalOpen(false);
-  }
+
+  // 监听data数据变化
+  useEffect(() => {
+    console.log('data', data);
+  }, [data])
+
+  const columns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      render: t => t
+    },
+    {
+      title: '颜色',
+      dataIndex: 'color',
+      render: (t, r) => (
+        <div>
+          <div style={{backgroundColor: r.color, width: 10, height: 10, display: 'inline-block'}}></div>
+          <span>{ t }</span>
+        </div>
+      )
+    },
+    {
+      title: '操作',
+      render: (_, record) => (
+        <span>
+          <a onClick={() => handleEdit(record)}>修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => updateData(record, 'delete')} style={{color: '#ff4d4f'}}>删除</a>
+        </span>
+      )
+    },
+  ];
 
   // 添加按钮事件
   const handleSumbit = () => {
@@ -107,16 +151,17 @@ function Tag(props) {
       <Button onClick={() => handleAdd()}>添加</Button>
       {/* Modal弹窗 */}
       <Modal
-        title={ (type === 'add' ? '添加' : '修改') + '标签'}
+        title={ (type === 'edit' ? '修改' : '添加') + '标签'}
         style={{ top: 20 }}
         open={modalOpen}
         onOk={() => handleSumbit()}
         onCancel={() => setModalOpen(false)}
         okText="确认"
         cancelText="取消"
+        destroyOnClose={true}  // 关闭时销毁Modal里的子元素
       >
         {/* Form表单输入内容 */}
-        <Form form={form} name='form'>
+        <Form form={form} name='form' preserve={false}>
           <Form.Item
             label="标签名称"
             name="name"
@@ -143,7 +188,7 @@ function Tag(props) {
           </Form.Item>
         </Form>
       </Modal>
-      <TagList data={data} handleEdit={handleEdit} updateData={updateData} />       
+      <Table columns={columns} dataSource={data} rowKey='key' />      
     </div>
   )
 }

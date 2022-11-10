@@ -1,22 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MDEditor from '@uiw/react-md-editor';
 import { connect } from 'react-redux';
 import { actionCreators } from '../../../../store/tables';
 import './style.less';
+// import { useLocalStorage } from '../../../../utils/useLocalStorage';
 
 let index = 1;
 function Editor(props) {
-  console.log('props下的dataSource', props.dataSource.toJS());
+  console.log('props.dataSource', props.dataSource.toJS());
   // debugger;
-  const [value, setValue] = React.useState();
+
   // 获取输入框的文章名
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(() => {
+    // 从本地存储检索数据 以做到从存储中获取到更新的状态
+    const saved = localStorage.getItem("inputValue");
+    // JSON.parse() 将数据转换为 JavaScript 对象
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
+
+  // 获取标签
+  const [selectValue, setSelectValue] = useState(() => {
+    // 从本地存储检索数据 以做到从存储中获取到更新的状态
+    const saved = localStorage.getItem("selectValue");
+    // JSON.parse() 将数据转换为 JavaScript 对象
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
+
+  // 输入文本
+  const [value, setValue] = React.useState(() => {
+      // 从本地存储检索数据 以做到从存储中获取到更新的状态
+    const saved = localStorage.getItem("value");
+    // JSON.parse() 将数据转换为 JavaScript 对象
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
+
   // console.log('inputValue', inputValue);
   // const typeMap = {
   //   create: '发布',
   //   edit: '保存'
   // }
-  // let dataSource = props.dataSource.toJS();
+
+  useEffect(() => {
+    // localStorage.setItem("name",inputValue) 
+    localStorage.setItem("name", JSON.stringify(inputValue)) 
+    localStorage.setItem("tag", JSON.stringify(selectValue))
+    localStorage.setItem("content", JSON.stringify(value))
+  })
 
   const handleSumbit = () => {
     let obj = {
@@ -26,6 +58,7 @@ function Editor(props) {
     index++
     props.add(obj);
   }
+
 
   return (
     <div className="editorBox">
@@ -38,7 +71,7 @@ function Editor(props) {
         ></input>
         <div className="tag">
           标签：
-          <select placeholder="请选择文章所属标签">
+          <select placeholder="请选择文章所属标签" value={selectValue} onChange={e => {setSelectValue(e.target.value)}}>
             <option style={{display: 'none'}}></option>
             <option value="red">red</option>
             <option value="orange">orange</option>
@@ -72,3 +105,5 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+
+// export default Editor;
